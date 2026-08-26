@@ -1,0 +1,369 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =BODY= */
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: url(https://plus.unsplash.com/premium_photo-1700502264441-cf38978031fa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) no-repeat ;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+
+/* =LOGIN CONTAINER= */
+
+.login-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+
+/* LOGIN BOX */
+
+.login-box {
+
+    background: rgba(255, 255, 255, 0.15);
+
+    backdrop-filter: blur(15px);
+
+    -webkit-backdrop-filter: blur(15px);
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+
+    border-radius: 20px;
+
+    padding: 40px;
+
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.25);
+
+    color: white;
+}
+
+
+/* =HEADING=*/
+
+.login-box h1 {
+    text-align: center;
+
+    font-size: 30px;
+
+    margin-bottom: 10px;
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: rgba(255, 255, 255, 0.8);
+
+    margin-bottom: 30px;
+
+    font-size: 14px;
+}
+
+
+/* =INPUT GROUP=*/
+
+.input-group {
+
+    position: relative;
+
+    margin-bottom: 20px;
+}
+
+
+/* Left icon */
+
+.input-group > i:first-child {
+
+    position: absolute;
+
+    left: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #777;
+
+}
+
+
+/* Input */
+
+.input-group input {
+
+    width: 100%;
+
+    padding: 15px 45px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    transition: 0.3s;
+}
+
+
+/* Input focus */
+
+.input-group input:focus {
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.3);
+
+    transform: translateY(-1px);
+}
+
+
+/* =PASSWORD TOGGLE=*/
+
+.password-toggle {
+
+    position: absolute;
+
+    right: 15px;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    color: #777;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.password-toggle:hover {
+
+    color: #333;
+
+}
+
+
+/* =OPTIONS=*/
+
+.options {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    font-size: 13px;
+
+    margin-bottom: 25px;
+}
+
+
+.options label {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    cursor: pointer;
+}
+
+
+.options a {
+
+    color: white;
+
+    text-decoration: none;
+
+    transition: 0.3s;
+}
+
+
+.options a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =LOGIN BUTTON= */
+
+.login-btn {
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: white;
+
+    color: #667eea;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.login-btn:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+
+.login-btn:active {
+
+    transform: scale(0.98);
+}
+
+
+/* =DIVIDER=*/
+
+.divider {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 25px 0;
+
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+.divider::before,
+.divider::after {
+
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.3);
+}
+
+
+/* =SOCIAL BUTTON=*/
+
+.social-btn {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border: 1px solid rgba(255, 255, 255, 0.4);
+
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+.social-btn i {
+
+    margin-right: 8px;
+}
+
+
+.social-btn:hover {
+
+    background: rgba(255, 255, 255, 0.2);
+
+}
+
+
+/* =REGISTER=*/
+
+.register-text {
+
+    text-align: center;
+
+    margin-top: 25px;
+
+    font-size: 14px;
+
+    color: rgba(255, 255, 255, 0.8);
+}
+
+
+.register-text a {
+
+    color: white;
+
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+
+.register-text a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+/* =MOBILE RESPONSIVE=*/
+
+@media (max-width: 480px) {
+
+    .login-box {
+
+        padding: 30px 20px;
+
+    }
+
+    .login-box h1 {
+
+        font-size: 25px;
+
+    }
+
+    .options {
+
+        font-size: 12px;
+
+    }
+
+}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login Page</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="login-container">
+
+        <div class="login-box">
+
+            <!-- Heading -->
+            <h1>Welcome Back! 👋</h1>
+
+            <p class="subtitle">
+                Sign in to continue to your account
+            </p>
+
+
+            <!-- Login Form -->
+            <form id="loginForm">
+
+                <!-- Username -->
+                <div class="input-group">
+
+                    <i class="fa-solid fa-user"></i>
+
+                    <input
+                        type="text"
+                        id="username"
+                        placeholder="Username"
+                    >
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="input-group">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Password"
+                    >
+
+                    <i
+                        class="fa-solid fa-eye password-toggle"
+                        id="togglePassword">
+                    </i>
+
+                </div>
+
+
+                <!-- Remember + Forgot -->
+                <div class="options">
+
+                    <label>
+                        <input type="checkbox" id="remember">
+                        Remember me
+                    </label>
+
+                    <a href="#">Forgot Password?</a>
+
+                </div>
+
+
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">
+                    Login
+                </button>
+
+            </form>
+
+
+            <!-- Divider -->
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+
+            <!-- Google Login -->
+            <button class="social-btn">
+                <i class="fa-brands fa-google"></i>
+                Continue with Google
+            </button>
+
+
+            <!-- Register -->
+            <p class="register-text">
+                Don't have an account?
+                <a href="#">Create Account</a>
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+
+</html>
