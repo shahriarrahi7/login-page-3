@@ -28,5 +28,5 @@ Secured passwords with PBKDF2 SHA-256 hashing on the server side
 Deployed on Vercel with serverless functions — live at hello-buddy-three.vercel.app
 
 
-Live Link to include: https://hello-buddy-three.vercel.app
+Live Link to include: https://hello-buddy-three.vercel.app/
 GitHub Repo: https://github.com/shahriarrahi7/login-page-3
