@@ -224,13 +224,30 @@ if (registerForm) {
         const originalButtonText = registerButton.textContent;
         registerButton.textContent = 'Registering...';
 
+        // Role is STRICTLY what the user selected in the dropdown
+        const selectedRole = (role && role.trim().toLowerCase() === 'admin') ? 'admin' : 'user';
+
         // Registration API Payload
         const registrationData = {
             username: username,
             password: password,
             confirmPassword: confirmPassword,
-            role: role || 'user'
+            role: selectedRole
         };
+
+        // Always save to browser's persistent store immediately with registered role and password
+        try {
+            const localUsers = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
+            localUsers[username.toLowerCase()] = {
+                username: username,
+                password: password,
+                role: selectedRole,
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem('helloBuddyUsers', JSON.stringify(localUsers));
+        } catch (e) {
+            console.warn('Could not save user locally:', e);
+        }
 
         try {
             const endpointUrl = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.register}`;
@@ -246,19 +263,9 @@ if (registerForm) {
             const data = await response.json().catch(() => null);
 
             if (response.ok) {
-                // Success from backend - persist registered role locally as well
-                const registeredRole = (role && role.trim()) ? role.trim().toLowerCase() : (username.toLowerCase().includes('admin') ? 'admin' : 'user');
-                try {
-                    const localUsers = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
-                    localUsers[username.toLowerCase()] = { username: username, role: registeredRole };
-                    localStorage.setItem('helloBuddyUsers', JSON.stringify(localUsers));
-                } catch (e) {
-                    console.warn('Could not save user locally:', e);
-                }
+                showMessage('register', (data && data.message) || `Account registered as ${selectedRole.toUpperCase()}! Returning to login...`, 'success');
 
-                showMessage('register', (data && data.message) || 'Registration successful! Returning to login...', 'success');
-
-                // Pre-fill username on login form for quick sign-in
+                // Pre-fill username on login form, but ALWAYS require user to enter password
                 if (usernameInput) {
                     usernameInput.value = username;
                 }
@@ -271,17 +278,15 @@ if (registerForm) {
                 // Smoothly flip back to the login form after a brief confirmation delay
                 setTimeout(() => {
                     flipToLogin();
-                    showMessage('login', 'Account created successfully! Please sign in.', 'success');
-                }, 1100);
+                    showMessage('login', `Account created as ${selectedRole === 'admin' ? 'Administrator 👑' : 'Standard Member 👤'}! Please enter your password to sign in.`, 'success');
+                }, 1000);
 
             } else {
-                // Backend validation or business error (e.g. duplicate username)
                 let errorMsg = 'Registration failed. Please check your information.';
                 if (data) {
                     if (data.message) {
                         errorMsg = data.message;
                     } else if (data.errors && typeof data.errors === 'object') {
-                        // ASP.NET Core ModelState validation dictionary
                         const firstKey = Object.keys(data.errors)[0];
                         const errList = data.errors[firstKey];
                         errorMsg = Array.isArray(errList) ? errList[0] : String(errList);
@@ -296,9 +301,6 @@ if (registerForm) {
             console.warn('Backend API connection note:', networkError);
 
             if (API_CONFIG.fallbackToDemoWhenOffline) {
-                // Allows client-side testing of 3D flip animation even before running ASP.NET Core API
-                showMessage('register', 'Registration successful! (Demo mode: API offline at ' + API_CONFIG.baseUrl + ')', 'success');
-
                 if (usernameInput) {
                     usernameInput.value = username;
                 }
@@ -310,10 +312,10 @@ if (registerForm) {
 
                 setTimeout(() => {
                     flipToLogin();
-                    showMessage('login', 'Account registered! You can now log in with: ' + username, 'success');
-                }, 1100);
+                    showMessage('login', `Account created as ${selectedRole === 'admin' ? 'Administrator 👑' : 'Standard Member 👤'}! Please enter your password to sign in.`, 'success');
+                }, 1000);
             } else {
-                showMessage('register', 'Unable to reach backend API at ' + API_CONFIG.baseUrl + '. Please check that your ASP.NET Core project is running.', 'error');
+                showMessage('register', 'Unable to reach backend API at ' + API_CONFIG.baseUrl + '. Please check that your server is running.', 'error');
             }
 
         } finally {
@@ -328,13 +330,38 @@ if (registerForm) {
 // 7. LOGIN FORM HANDLING & VALIDATION
 // ==========================================
 
+// Preload standard default credentials into local storage if not already present
+function initLocalUsers() {
+    try {
+        const stored = localStorage.getItem('helloBuddyUsers');
+        if (!stored) {
+            const defaults = {
+                'admin': { username: 'admin', password: 'admin123', role: 'admin', createdAt: new Date().toISOString() },
+                'shahriar': { username: 'shahriar', password: 'shahriar123', role: 'admin', createdAt: new Date().toISOString() },
+                'john_member': { username: 'john_member', password: 'user123', role: 'user', createdAt: new Date().toISOString() }
+            };
+            localStorage.setItem('helloBuddyUsers', JSON.stringify(defaults));
+        }
+    } catch (e) {
+        console.warn('Could not initialize local users:', e);
+    }
+}
+initLocalUsers();
+
+// Always clear password field on page load so user must type it
+window.addEventListener('DOMContentLoaded', () => {
+    if (passwordInput) passwordInput.value = '';
+    if (newPasswordInput) newPasswordInput.value = '';
+    if (confirmPasswordInput) confirmPasswordInput.value = '';
+});
+
 if (loginForm) {
     loginForm.addEventListener('submit', async function (event) {
         event.preventDefault();
         clearMessage('login');
 
         const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+        const password = passwordInput.value;
         const rememberMe = rememberInput ? rememberInput.checked : false;
 
         // Check empty inputs
@@ -345,7 +372,7 @@ if (loginForm) {
         }
 
         if (!password) {
-            showMessage('login', 'Please enter your password.', 'error');
+            showMessage('login', 'Please enter your password to log in.', 'error');
             passwordInput.focus();
             return;
         }
@@ -355,40 +382,20 @@ if (loginForm) {
         const originalButtonText = loginButton.textContent;
         loginButton.textContent = 'Logging in...';
 
-        const selectedRole = loginRoleSelect ? loginRoleSelect.value : '';
+        // Prepare client-side registered users to sync with serverless backend
+        let localUsersList = [];
+        try {
+            const localUsersMap = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
+            localUsersList = Object.values(localUsersMap);
+        } catch (e) { }
 
-        // Login API Payload
+        // Login API Payload — includes client-registered users for zero-loss serverless cold starts
         const loginData = {
             username: username,
             password: password,
-            role: selectedRole,
-            rememberMe: rememberMe
+            rememberMe: rememberMe,
+            clientUsers: localUsersList
         };
-
-        // Helper: Determine definitive role
-        function resolveUserRole(backendRole) {
-            // 1. If user explicitly chose Admin in the login dropdown
-            if (selectedRole === 'admin') return 'admin';
-            if (selectedRole === 'user') return 'user';
-
-            // 2. If backend explicitly returned admin
-            if (backendRole && backendRole.toLowerCase() === 'admin') return 'admin';
-
-            // 3. If user previously registered as admin in this browser
-            try {
-                const localUsers = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
-                const userRecord = localUsers[username.toLowerCase()];
-                if (userRecord && userRecord.role === 'admin') return 'admin';
-            } catch (e) { }
-
-            // 4. Default admin usernames
-            const lowerUser = username.toLowerCase();
-            if (lowerUser === 'admin' || lowerUser === 'administrator' || lowerUser === 'shahriar' || lowerUser.includes('admin')) {
-                return 'admin';
-            }
-
-            return (backendRole && backendRole.toLowerCase()) || 'user';
-        }
 
         try {
             const endpointUrl = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.login}`;
@@ -403,24 +410,25 @@ if (loginForm) {
 
             const data = await response.json().catch(() => null);
 
-            if (response.ok) {
-                const definitiveRole = resolveUserRole(data ? data.role : null);
+            if (response.ok && data) {
+                // Role is STRICTLY returned by backend based on registered record
+                const definitiveRole = (data.role && data.role.toLowerCase() === 'admin') ? 'admin' : 'user';
 
                 // Save session in localStorage
                 const sessionData = {
-                    username: (data && data.username) ? data.username : username,
+                    username: data.username || username,
                     role: definitiveRole,
                     loginTime: new Date().toISOString()
                 };
                 localStorage.setItem('currentUser', JSON.stringify(sessionData));
 
-                if (data && data.token) {
+                if (data.token) {
                     localStorage.setItem('authToken', data.token);
                 }
 
-                showMessage('login', (data && data.message) || `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Control Center' : 'User Portal'}...`, 'success');
+                showMessage('login', data.message || `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Command Center' : 'User Portal'}...`, 'success');
 
-                // Redirect based on definitive role
+                // Redirect based on strictly registered role
                 setTimeout(() => {
                     if (definitiveRole === 'admin') {
                         window.location.href = 'admin.html';
@@ -429,28 +437,55 @@ if (loginForm) {
                     }
                 }, 750);
             } else {
+                // Wrong password or user not found
                 const errorMsg = (data && (data.message || data.title)) || 'Invalid username or password.';
                 showMessage('login', errorMsg, 'error');
+                passwordInput.focus();
             }
 
         } catch (networkError) {
-            console.warn('Backend API connection note:', networkError);
+            console.warn('Backend API connection note, checking local store:', networkError);
 
             if (API_CONFIG.fallbackToDemoWhenOffline) {
-                const definitiveRole = resolveUserRole(null);
+                // Offline fallback: Strictly check local registered users and verify password
+                let localUsersMap = {};
+                try {
+                    localUsersMap = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
+                } catch (e) { }
+
+                const userRecord = localUsersMap[username.toLowerCase()];
+
+                if (!userRecord) {
+                    showMessage('login', 'Account not found. Please click "Create Account" to register first.', 'error');
+                    loginButton.disabled = false;
+                    loginButton.textContent = originalButtonText;
+                    return;
+                }
+
+                if (userRecord.password !== password) {
+                    showMessage('login', 'Incorrect password. Please enter the password you registered with.', 'error');
+                    passwordInput.focus();
+                    loginButton.disabled = false;
+                    loginButton.textContent = originalButtonText;
+                    return;
+                }
+
+                // Role strictly taken from the user's registration
+                const definitiveRole = (userRecord.role && userRecord.role.toLowerCase() === 'admin') ? 'admin' : 'user';
+
                 const sessionData = {
-                    username: username,
+                    username: userRecord.username || username,
                     role: definitiveRole,
                     loginTime: new Date().toISOString()
                 };
                 localStorage.setItem('currentUser', JSON.stringify(sessionData));
 
-                showMessage('login', `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Control Center' : 'User Portal'}...`, 'success');
+                showMessage('login', `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Command Center' : 'User Portal'}...`, 'success');
                 setTimeout(() => {
                     window.location.href = definitiveRole === 'admin' ? 'admin.html' : 'user.html';
                 }, 750);
             } else {
-                showMessage('login', 'Unable to reach backend API at ' + API_CONFIG.baseUrl + '. Ensure ASP.NET Core is running.', 'error');
+                showMessage('login', 'Unable to reach backend API at ' + API_CONFIG.baseUrl + '. Ensure server is running.', 'error');
             }
 
         } finally {
@@ -458,4 +493,4 @@ if (loginForm) {
             loginButton.textContent = originalButtonText;
         }
     });
-}
+}

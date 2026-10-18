@@ -88,16 +88,6 @@
                         </i>
                     </div>
 
-                    <!-- Role Selector for Login -->
-                    <div class="input-group select-group">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <select id="loginRole" title="Select whether to log in as User or Admin">
-                            <option value="">Auto-Detect Role</option>
-                            <option value="admin">Login as Admin 👑</option>
-                            <option value="user">Login as User / Member 👤</option>
-                        </select>
-                    </div>
-
                     <!-- Remember + Forgot -->
                     <div class="options">
                         <label>
@@ -194,13 +184,12 @@
                         </i>
                     </div>
 
-                    <!-- Role Selector (Preserved from existing project) -->
+                    <!-- Role Selector on Registration -->
                     <div class="input-group select-group">
                         <i class="fa-solid fa-id-badge"></i>
-                        <select id="role">
-                            <option value="">Select Role (Optional)</option>
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
+                        <select id="role" required>
+                            <option value="user">Register as Standard Member / User 👤</option>
+                            <option value="admin">Register as Administrator 👑</option>
                         </select>
                     </div>
 
