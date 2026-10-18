@@ -7,6 +7,9 @@ A full-stack role-based login system with 3D UI animations, deployed on Vercel w
 Full Description (for project section)
 Designed and developed a full-stack web application featuring secure user authentication with role-based access control. The frontend uses a CSS 3D flip card animation to toggle between Login and Registration forms. Upon login, users are redirected to role-specific dashboards — an Admin panel with a user management table and a User panel with account info. The backend is built with ASP.NET Core Web API connected to Microsoft SQL Server, with passwords secured using PBKDF2 SHA-256 hashing. The app is deployed live on Vercel using serverless API functions.
 
+<img width="434" height="476" alt="image" src="https://github.com/user-attachments/assets/c7e9ed11-93a5-4bd6-a21c-61fcebe2e8b5" />
+
+
 
 🔑 Key Features to Mention
 
