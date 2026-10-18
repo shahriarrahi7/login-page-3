@@ -9,13 +9,14 @@ Designed and developed a full-stack web application featuring secure user authen
 
 
 🔑 Key Features to Mention
-🔄 Smooth 3D flip card animation between Login & Registration
-🔐 Role-based access — separate Admin and User dashboards
-🗄️ SQL Server integration — admin can view all registered users
-🌐 Live deployed at hello-buddy-three.vercel.app
-📱 Fully responsive on desktop and mobile
-💡 Tip for CV Bullet Points
-If your CV uses bullet points instead of a paragraph, write it like this:
+
+1. 🔄 Smooth 3D flip card animation between Login & Registration
+2. 🔐 Role-based access — separate Admin and User dashboards
+3. 🗄️ SQL Server integration — admin can view all registered users
+4. 🌐 Live deployed at hello-buddy-three.vercel.app
+5. 📱 Fully responsive on desktop and mobile
+6. 💡 Tip for CV Bullet Points
+
 
 Built a full-stack login/registration system with ASP.NET Core and MS SQL Server
 Implemented CSS 3D flip animation for seamless form switching using transform-style: preserve-3d
