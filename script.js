@@ -36,6 +36,7 @@ const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const rememberInput = document.getElementById('remember');
 const loginButton = document.getElementById('loginButton');
+const loginRoleSelect = document.getElementById('loginRole');
 const togglePassword = document.getElementById('togglePassword');
 const loginMessage = document.getElementById('loginMessage');
 
@@ -245,7 +246,16 @@ if (registerForm) {
             const data = await response.json().catch(() => null);
 
             if (response.ok) {
-                // Success from ASP.NET Core backend
+                // Success from backend - persist registered role locally as well
+                const registeredRole = (role && role.trim()) ? role.trim().toLowerCase() : (username.toLowerCase().includes('admin') ? 'admin' : 'user');
+                try {
+                    const localUsers = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
+                    localUsers[username.toLowerCase()] = { username: username, role: registeredRole };
+                    localStorage.setItem('helloBuddyUsers', JSON.stringify(localUsers));
+                } catch (e) {
+                    console.warn('Could not save user locally:', e);
+                }
+
                 showMessage('register', (data && data.message) || 'Registration successful! Returning to login...', 'success');
 
                 // Pre-fill username on login form for quick sign-in
@@ -345,12 +355,40 @@ if (loginForm) {
         const originalButtonText = loginButton.textContent;
         loginButton.textContent = 'Logging in...';
 
+        const selectedRole = loginRoleSelect ? loginRoleSelect.value : '';
+
         // Login API Payload
         const loginData = {
             username: username,
             password: password,
+            role: selectedRole,
             rememberMe: rememberMe
         };
+
+        // Helper: Determine definitive role
+        function resolveUserRole(backendRole) {
+            // 1. If user explicitly chose Admin in the login dropdown
+            if (selectedRole === 'admin') return 'admin';
+            if (selectedRole === 'user') return 'user';
+
+            // 2. If backend explicitly returned admin
+            if (backendRole && backendRole.toLowerCase() === 'admin') return 'admin';
+
+            // 3. If user previously registered as admin in this browser
+            try {
+                const localUsers = JSON.parse(localStorage.getItem('helloBuddyUsers') || '{}');
+                const userRecord = localUsers[username.toLowerCase()];
+                if (userRecord && userRecord.role === 'admin') return 'admin';
+            } catch (e) { }
+
+            // 4. Default admin usernames
+            const lowerUser = username.toLowerCase();
+            if (lowerUser === 'admin' || lowerUser === 'administrator' || lowerUser === 'shahriar' || lowerUser.includes('admin')) {
+                return 'admin';
+            }
+
+            return (backendRole && backendRole.toLowerCase()) || 'user';
+        }
 
         try {
             const endpointUrl = `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.login}`;
@@ -366,12 +404,12 @@ if (loginForm) {
             const data = await response.json().catch(() => null);
 
             if (response.ok) {
-                const userRole = (data && data.role) ? data.role.toLowerCase() : 'user';
+                const definitiveRole = resolveUserRole(data ? data.role : null);
 
                 // Save session in localStorage
                 const sessionData = {
                     username: (data && data.username) ? data.username : username,
-                    role: userRole,
+                    role: definitiveRole,
                     loginTime: new Date().toISOString()
                 };
                 localStorage.setItem('currentUser', JSON.stringify(sessionData));
@@ -380,11 +418,11 @@ if (loginForm) {
                     localStorage.setItem('authToken', data.token);
                 }
 
-                showMessage('login', (data && data.message) || `Login successful! Redirecting to ${userRole} dashboard...`, 'success');
+                showMessage('login', (data && data.message) || `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Control Center' : 'User Portal'}...`, 'success');
 
-                // Redirect based on role
+                // Redirect based on definitive role
                 setTimeout(() => {
-                    if (userRole === 'admin') {
+                    if (definitiveRole === 'admin') {
                         window.location.href = 'admin.html';
                     } else {
                         window.location.href = 'user.html';
@@ -399,17 +437,17 @@ if (loginForm) {
             console.warn('Backend API connection note:', networkError);
 
             if (API_CONFIG.fallbackToDemoWhenOffline) {
-                const detectedRole = username.toLowerCase().includes('admin') ? 'admin' : 'user';
+                const definitiveRole = resolveUserRole(null);
                 const sessionData = {
                     username: username,
-                    role: detectedRole,
+                    role: definitiveRole,
                     loginTime: new Date().toISOString()
                 };
                 localStorage.setItem('currentUser', JSON.stringify(sessionData));
 
-                showMessage('login', `Login successful (Demo mode)! Redirecting...`, 'success');
+                showMessage('login', `Login successful! Redirecting to ${definitiveRole === 'admin' ? 'Admin Control Center' : 'User Portal'}...`, 'success');
                 setTimeout(() => {
-                    window.location.href = detectedRole === 'admin' ? 'admin.html' : 'user.html';
+                    window.location.href = definitiveRole === 'admin' ? 'admin.html' : 'user.html';
                 }, 750);
             } else {
                 showMessage('login', 'Unable to reach backend API at ' + API_CONFIG.baseUrl + '. Ensure ASP.NET Core is running.', 'error');

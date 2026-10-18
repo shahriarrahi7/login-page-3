@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard | Account Portal</title>
+    <title>Member Hub | Hello Buddy</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -27,15 +27,24 @@
         <!-- Top Navigation Bar -->
         <header class="dashboard-nav">
             <div class="nav-brand">
-                <i class="fa-solid fa-handshake-angle"></i>
-                <span>Hello Buddy</span>
+                <i class="fa-solid fa-handshake-angle" style="color: #6ee7b7;"></i>
+                <span>Hello Buddy <small style="font-size: 11px; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase;">Member Portal</small></span>
             </div>
 
             <div class="nav-user">
+                <!-- Role Badge -->
                 <span class="role-badge user-badge">
-                    <i class="fa-solid fa-user"></i> Member
+                    <i class="fa-solid fa-user-check"></i> Member
                 </span>
-                <span id="navUsername" class="nav-username">User</span>
+
+                <!-- Switch to Admin View (displayed dynamically via JS if user is admin) -->
+                <a href="admin.html" id="navAdminSwitch" class="switch-view-btn admin-glow-btn" style="display: none;" title="Switch to Admin Command Center">
+                    <i class="fa-solid fa-crown"></i>
+                    <span>Admin Panel</span>
+                </a>
+
+                <span id="navUsername" class="nav-username">Member</span>
+
                 <button id="logoutBtn" class="logout-btn" title="Sign out of your account">
                     <i class="fa-solid fa-right-from-bracket"></i>
                     <span>Logout</span>
@@ -54,76 +63,170 @@
                 <div class="greeting-text">
                     <h1>Hello User, <span id="userGreetingName">Member</span>! 👋</h1>
                     <p class="greeting-subtitle">
-                        Welcome to your personal account dashboard. You are securely authenticated with SQL Server.
+                        Welcome to your personal account hub. View your digital member passport, manage security credentials, and review activity.
                     </p>
                 </div>
             </div>
 
-            <!-- Profile Overview Cards -->
-            <div class="stats-grid user-stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon user-stat-icon">
-                        <i class="fa-solid fa-id-badge"></i>
+            <!-- Digital Holographic Member Card -->
+            <div class="digital-id-card">
+                <div class="card-top-row">
+                    <div class="card-chip">
+                        <div class="chip-graphic"></div>
+                        <span class="card-title-text">Hello Buddy &bull; Member Pass</span>
                     </div>
-                    <div class="stat-info">
-                        <span class="stat-label">Account Role</span>
-                        <h3 id="statUserRole">User</h3>
-                    </div>
+                    <i class="fa-solid fa-wifi contactless-icon" title="NFC / Digital ID"></i>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon security-icon">
-                        <i class="fa-solid fa-shield-check"></i>
-                    </div>
-                    <div class="stat-info">
-                        <span class="stat-label">Security Encryption</span>
-                        <h3>PBKDF2 SHA-256</h3>
-                    </div>
+                <div class="card-middle-row">
+                    <div class="card-member-name" id="cardMemberName">Member</div>
+                    <div class="card-member-id" id="cardMemberId">HB-2026-USER</div>
                 </div>
 
-                <div class="stat-card">
-                    <div class="stat-icon time-icon">
-                        <i class="fa-solid fa-clock"></i>
+                <div class="card-bottom-row">
+                    <div>
+                        <span style="opacity: 0.7; font-size: 11px; display: block;">TIER STATUS</span>
+                        <strong style="color: #e0f2fe; font-size: 13px;">Standard Member</strong>
                     </div>
-                    <div class="stat-info">
-                        <span class="stat-label">Session Status</span>
-                        <h3 class="status-online"><i class="fa-solid fa-circle"></i> Active Now</h3>
+                    <div>
+                        <span style="opacity: 0.7; font-size: 11px; display: block;">EXPIRES</span>
+                        <strong style="color: #e0f2fe; font-size: 13px;">12/2028</strong>
                     </div>
+                    <span class="card-valid-badge">
+                        <i class="fa-solid fa-circle-check"></i> Verified
+                    </span>
                 </div>
             </div>
 
-            <!-- Account Details Card -->
-            <section class="account-card">
-                <h2>
-                    <i class="fa-solid fa-address-card"></i>
-                    Your Account Information
-                </h2>
+            <!-- 2-Column Split: Personal Info + Security Settings -->
+            <div class="user-split-layout">
 
-                <div class="info-list">
-                    <div class="info-item">
-                        <span class="info-label"><i class="fa-solid fa-user"></i> Username:</span>
-                        <strong id="infoUsername" class="info-value">Loading...</strong>
+                <!-- Left Column: Account Information -->
+                <div class="user-panel-box">
+                    <h3>
+                        <i class="fa-solid fa-address-card" style="color: #93c5fd;"></i>
+                        Account Profile
+                    </h3>
+
+                    <div class="info-list" style="grid-template-columns: 1fr; gap: 10px;">
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-user"></i> Username:</span>
+                            <strong id="infoUsername" class="info-value">Loading...</strong>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-id-badge"></i> Access Level:</span>
+                            <strong id="infoRole" class="info-value">Standard User</strong>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-database"></i> Database:</span>
+                            <span class="info-value">MSSQL UserAuthDB</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label"><i class="fa-solid fa-clock"></i> Login Time:</span>
+                            <span id="infoLoginTime" class="info-value">Today</span>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label"><i class="fa-solid fa-tag"></i> Access Level:</span>
-                        <strong id="infoRole" class="info-value">Standard User</strong>
+
+                    <!-- Notification Preferences -->
+                    <div style="margin-top: 20px;">
+                        <h4 style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: rgba(255,255,255,0.9);">
+                            <i class="fa-solid fa-bell"></i> Preferences
+                        </h4>
+                        <div class="setting-item">
+                            <div class="setting-desc">
+                                <strong>Login Email Alerts</strong>
+                                <span>Get notified when you log in from new devices</span>
+                            </div>
+                            <label class="switch-toggle">
+                                <input type="checkbox" checked id="prefLoginAlerts">
+                                <span class="slider-round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-desc">
+                                <strong>Two-Factor Auth (2FA)</strong>
+                                <span>Require verification code upon sign in</span>
+                            </div>
+                            <label class="switch-toggle">
+                                <input type="checkbox" id="pref2FA">
+                                <span class="slider-round"></span>
+                            </label>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label"><i class="fa-solid fa-database"></i> Database:</span>
-                        <span class="info-value">Microsoft SQL Server (UserAuthDB)</span>
+                </div>
+
+                <!-- Right Column: Security & Password Update -->
+                <div class="user-panel-box">
+                    <h3>
+                        <i class="fa-solid fa-shield-halved" style="color: #6ee7b7;"></i>
+                        Security &amp; Password
+                    </h3>
+
+                    <form id="userPasswordForm" class="password-change-form">
+                        <label style="font-size: 12.5px; color: rgba(255,255,255,0.8);">Current Password</label>
+                        <input type="password" id="userCurrentPwd" class="user-input-field" placeholder="Enter current password" required>
+
+                        <label style="font-size: 12.5px; color: rgba(255,255,255,0.8);">New Password (min 6 chars)</label>
+                        <input type="password" id="userNewPwd" class="user-input-field" placeholder="Enter new secure password" required minlength="6">
+
+                        <label style="font-size: 12.5px; color: rgba(255,255,255,0.8);">Confirm New Password</label>
+                        <input type="password" id="userConfirmPwd" class="user-input-field" placeholder="Re-enter new password" required>
+
+                        <div id="pwdChangeMsg" class="message-banner" style="display: none; font-size: 12.5px; padding: 8px;"></div>
+
+                        <button type="submit" class="save-pwd-btn" id="btnSavePassword">
+                            <i class="fa-solid fa-floppy-disk"></i> Update Password
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <!-- Personal Activity Timeline -->
+            <section class="user-panel-box">
+                <h3>
+                    <i class="fa-solid fa-timeline" style="color: #d8b4fe;"></i>
+                    Recent Account Activity
+                </h3>
+
+                <div class="activity-timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon icon-green">
+                            <i class="fa-solid fa-right-to-bracket"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Successful Authentication Session</div>
+                            <div class="timeline-meta" id="timelineLoginDate">Today &bull; Browser Session Verified via SQL Server PBKDF2</div>
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label"><i class="fa-solid fa-calendar-check"></i> Login Timestamp:</span>
-                        <span id="infoLoginTime" class="info-value">Today</span>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon icon-blue">
+                            <i class="fa-solid fa-shield-check"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Account Security Audit Passed</div>
+                            <div class="timeline-meta">100,000 Rounds SHA-256 Encryption Validated</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon icon-purple">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Hello Buddy Profile Active</div>
+                            <div class="timeline-meta">Full Member Access Granted</div>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Bottom Actions -->
-            <div class="dashboard-footer">
+            <div class="dashboard-footer" style="margin-top: 24px;">
                 <button id="bottomLogoutBtn" class="logout-btn secondary-logout">
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    Logout from Account
+                    Logout from Member Account
                 </button>
             </div>
 
