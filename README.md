@@ -1,3 +1,8 @@
+<img width="1854" height="871" alt="image" src="https://github.com/user-attachments/assets/9bb7abef-50e9-4e16-89ff-a4e5193c79f2" />
+
+
+
+
 Project Title
 Hello Buddy — Full-Stack Authentication Web Application
 
