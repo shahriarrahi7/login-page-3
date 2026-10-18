@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Account Portal</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body class="dashboard-body user-body">
+
+    <div class="dashboard-container">
+
+        <!-- Top Navigation Bar -->
+        <header class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fa-solid fa-handshake-angle"></i>
+                <span>Hello Buddy</span>
+            </div>
+
+            <div class="nav-user">
+                <span class="role-badge user-badge">
+                    <i class="fa-solid fa-user"></i> Member
+                </span>
+                <span id="navUsername" class="nav-username">User</span>
+                <button id="logoutBtn" class="logout-btn" title="Sign out of your account">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Card -->
+        <main class="dashboard-card glass-panel">
+
+            <!-- Hero Greeting -->
+            <div class="greeting-header">
+                <div class="avatar-circle user-avatar">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="greeting-text">
+                    <h1>Hello User, <span id="userGreetingName">Member</span>! 👋</h1>
+                    <p class="greeting-subtitle">
+                        Welcome to your personal account dashboard. You are securely authenticated with SQL Server.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profile Overview Cards -->
+            <div class="stats-grid user-stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon user-stat-icon">
+                        <i class="fa-solid fa-id-badge"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Account Role</span>
+                        <h3 id="statUserRole">User</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon security-icon">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Security Encryption</span>
+                        <h3>PBKDF2 SHA-256</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon time-icon">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Session Status</span>
+                        <h3 class="status-online"><i class="fa-solid fa-circle"></i> Active Now</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Details Card -->
+            <section class="account-card">
+                <h2>
+                    <i class="fa-solid fa-address-card"></i>
+                    Your Account Information
+                </h2>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label"><i class="fa-solid fa-user"></i> Username:</span>
+                        <strong id="infoUsername" class="info-value">Loading...</strong>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label"><i class="fa-solid fa-tag"></i> Access Level:</span>
+                        <strong id="infoRole" class="info-value">Standard User</strong>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label"><i class="fa-solid fa-database"></i> Database:</span>
+                        <span class="info-value">Microsoft SQL Server (UserAuthDB)</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label"><i class="fa-solid fa-calendar-check"></i> Login Timestamp:</span>
+                        <span id="infoLoginTime" class="info-value">Today</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bottom Actions -->
+            <div class="dashboard-footer">
+                <button id="bottomLogoutBtn" class="logout-btn secondary-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout from Account
+                </button>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Dashboard JavaScript -->
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>

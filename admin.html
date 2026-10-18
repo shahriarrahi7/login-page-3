@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Account Portal</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body class="dashboard-body admin-body">
+
+    <div class="dashboard-container">
+
+        <!-- Top Navigation Bar -->
+        <header class="dashboard-nav">
+            <div class="nav-brand">
+                <i class="fa-solid fa-handshake-angle"></i>
+                <span>Hello Buddy</span>
+            </div>
+
+            <div class="nav-user">
+                <span class="role-badge admin-badge">
+                    <i class="fa-solid fa-crown"></i> Admin
+                </span>
+                <span id="navUsername" class="nav-username">Admin</span>
+                <button id="logoutBtn" class="logout-btn" title="Sign out of your account">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Card -->
+        <main class="dashboard-card glass-panel">
+
+            <!-- Hero Greeting -->
+            <div class="greeting-header">
+                <div class="avatar-circle admin-avatar">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <div class="greeting-text">
+                    <h1>Hello Admin, <span id="adminGreetingName">Administrator</span>! 👑</h1>
+                    <p class="greeting-subtitle">
+                        Welcome to the control center. You have full access to database records and system analytics.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Stats Overview Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon users-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Registered Users</span>
+                        <h3 id="statTotalUsers">Loading...</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon db-icon">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Database</span>
+                        <h3 id="statDbName">MSSQL UserAuthDB</h3>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon server-icon">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-label">Server Status</span>
+                        <h3 class="status-online"><i class="fa-solid fa-circle"></i> Online</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Management Section -->
+            <section class="table-section">
+                <div class="section-header">
+                    <h2>
+                        <i class="fa-solid fa-table-list"></i>
+                        SQL Server User Records
+                    </h2>
+                    <button id="refreshBtn" class="action-btn" title="Refresh user list">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username / Email</th>
+                                <th>Role</th>
+                                <th>Registered Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <tr>
+                                <td colspan="4" class="table-loading">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Loading users from SQL Server...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Bottom Actions -->
+            <div class="dashboard-footer">
+                <button id="bottomLogoutBtn" class="logout-btn secondary-logout">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    Logout from Admin Account
+                </button>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- Dashboard JavaScript -->
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>
