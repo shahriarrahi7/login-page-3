@@ -5,10 +5,18 @@
  * ========================================================
  */
 
-// API Base URL (auto-detects host:port for Vercel and local)
-const API_BASE_URL = window.location.origin.startsWith('http')
-    ? `${window.location.origin}/api`
-    : 'http://localhost:5000/api';
+// Smart API URL Detection:
+// If running locally (Live Server on port 5500, localhost on any port, or file://):
+// Point directly to ASP.NET Core & SQL Server backend at http://localhost:5000/api
+// If running on production (e.g. Vercel):
+// Point to the hosted origin API (/api)
+const isLocalEnv = window.location.hostname === 'localhost' ||
+                   window.location.hostname === '127.0.0.1' ||
+                   window.location.protocol === 'file:';
+
+const API_BASE_URL = isLocalEnv
+    ? 'http://localhost:5000/api'
+    : `${window.location.origin}/api`;
 
 // Detect whether currently on admin page or user page
 const currentPath = window.location.pathname.toLowerCase();

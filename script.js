@@ -8,11 +8,17 @@
 // ==========================================
 // 1. BACKEND API CONFIGURATION (ASP.NET Core & MSSQL)
 // ==========================================
-// Connects to active backend (Vercel cloud API or local ASP.NET Core & MSSQL)
+// Smart routing:
+// - On localhost/127.0.0.1 (e.g., Live Server port 5500, or port 5000): routes to local ASP.NET Core & SQL Server on port 5000
+// - On Vercel / Cloud: routes to serverless /api
+const isLocalhost = window.location.hostname === 'localhost' ||
+                    window.location.hostname === '127.0.0.1' ||
+                    window.location.protocol === 'file:';
+
 const API_CONFIG = {
-    baseUrl: window.location.origin.startsWith('http')
-        ? `${window.location.origin}/api`
-        : 'http://localhost:5000/api',
+    baseUrl: isLocalhost
+        ? 'http://localhost:5000/api'
+        : `${window.location.origin}/api`,
     endpoints: {
         login: '/auth/login',       // Endpoint for authentication
         register: '/auth/register'  // Endpoint for user registration
