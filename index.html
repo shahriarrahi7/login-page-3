@@ -7,7 +7,12 @@
     <!-- Responsive design -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Login Page</title>
+    <title>Hello Buddy | Login &amp; Registration</title>
+
+    <!-- Google Fonts for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -19,98 +24,194 @@
 
 <body>
 
-    <div class="login-container">
+    <!-- 3D Flip Container -->
+    <div class="login-container" id="loginContainer">
 
-        <div class="login-box">
+        <!-- ========================================== -->
+        <!-- PROMINENT PROJECT BRANDING: HELLO BUDDY    -->
+        <!-- ========================================== -->
+        <header class="app-branding">
+            <div class="brand-badge-pill">
+                <i class="fa-solid fa-sparkles"></i> WELCOME PORTAL
+            </div>
+            <h1 class="project-title">
+                <i class="fa-solid fa-handshake-angle"></i> Hello Buddy
+            </h1>
+            <p class="project-tagline">Seamless Access &bull; Secure Authentication</p>
+        </header>
 
-            <!-- Heading -->
-            <h1>Welcome Back! 👋</h1>
+        <!-- Flippable 3D Card Inner (handles transform: rotateY) -->
+        <div class="flip-card-inner" id="cardInner">
 
-            <p class="subtitle">
-                Sign in to continue to your account
-            </p>
+            
+            <!-- FRONT CARD: LOGIN FORM-->
+            
+            <div class="card-face card-front login-box" id="loginCard">
 
+                <!-- Heading -->
+                <h1>Welcome Back! 👋</h1>
 
-            <!-- Login Form -->
-            <form id="loginForm">
+                <p class="subtitle">
+                    Sign in to continue to Hello Buddy
+                </p>
 
-                <!-- Username -->
-                <div class="input-group">
+                <!-- Feedback Message Banner -->
+                <div id="loginMessage" class="message-banner" role="alert"></div>
 
-                    <i class="fa-solid fa-user"></i>
+                <!-- Login Form -->
+                <form id="loginForm">
 
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Username"
-                    >
+                    <!-- Username / Email -->
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input
+                            type="text"
+                            id="username"
+                            placeholder="Email or Username"
+                            autocomplete="username"
+                        >
+                    </div>
 
+                    <!-- Password -->
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Password"
+                            autocomplete="current-password"
+                        >
+                        <i
+                            class="fa-solid fa-eye password-toggle"
+                            id="togglePassword"
+                            title="Show/Hide Password">
+                        </i>
+                    </div>
+
+                    <!-- Remember + Forgot -->
+                    <div class="options">
+                        <label>
+                            <input type="checkbox" id="remember">
+                            Remember me
+                        </label>
+                        <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="login-btn" id="loginButton">
+                        Login
+                    </button>
+
+                </form>
+
+                <!-- Divider -->
+                <div class="divider">
+                    <span>OR</span>
                 </div>
 
-
-                <!-- Password -->
-                <div class="input-group">
-
-                    <i class="fa-solid fa-lock"></i>
-
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Password"
-                    >
-
-                    <i
-                        class="fa-solid fa-eye password-toggle"
-                        id="togglePassword">
-                    </i>
-
-                </div>
-
-
-                <!-- Remember + Forgot -->
-                <div class="options">
-
-                    <label>
-                        <input type="checkbox" id="remember">
-                        Remember me
-                    </label>
-
-                    <a href="#">Forgot Password?</a>
-
-                </div>
-
-
-                <!-- Login Button -->
-                <button type="submit" class="login-btn">
-                    Login
+                <!-- Google Login -->
+                <button type="button" class="social-btn" id="googleLoginBtn">
+                    <i class="fa-brands fa-google"></i>
+                    Continue with Google
                 </button>
 
-            </form>
+                <!-- Flip to Registration Link -->
+                <p class="register-text">
+                    Don't have an account?
+                    <a href="#" id="showRegister">Create Account</a>
+                </p>
 
-
-            <!-- Divider -->
-            <div class="divider">
-                <span>OR</span>
             </div>
 
 
-            <!-- Google Login -->
-            <button class="social-btn">
-                <i class="fa-brands fa-google"></i>
-                Continue with Google
-            </button>
+            
+            <!-- BACK CARD: REGISTRATION FORM              -->
+            <div class="card-face card-back login-box" id="registerCard">
 
+                <!-- Heading -->
+                <h1>Create Account 🚀</h1>
 
-            <!-- Register -->
-            <p class="register-text">
-                Don't have an account?
-                <a href="#">Create Account</a>
-            </p>
+                <p class="subtitle">
+                    Join Hello Buddy &bull; Fill in your details
+                </p>
+
+                <!-- Feedback Message Banner -->
+                <div id="registerMessage" class="message-banner" role="alert"></div>
+
+                <!-- Registration Form -->
+                <form id="registerForm">
+
+                    <!-- Username / Email -->
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input
+                            type="text"
+                            id="new-username"
+                            placeholder="Username or Email"
+                            autocomplete="username"
+                        >
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <i class="fa-solid fa-lock"></i>
+                        <input
+                            type="password"
+                            id="new-password"
+                            placeholder="Password (min 6 characters)"
+                            autocomplete="new-password"
+                        >
+                        <i
+                            class="fa-solid fa-eye password-toggle"
+                            id="toggleNewPassword"
+                            title="Show/Hide Password">
+                        </i>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="input-group">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <input
+                            type="password"
+                            id="confirm-password"
+                            placeholder="Confirm Password"
+                            autocomplete="new-password"
+                        >
+                        <i
+                            class="fa-solid fa-eye password-toggle"
+                            id="toggleConfirmPassword"
+                            title="Show/Hide Password">
+                        </i>
+                    </div>
+
+                    <!-- Role Selector (Preserved from existing project) -->
+                    <div class="input-group select-group">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <select id="role">
+                            <option value="">Select Role (Optional)</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <!-- Register Button -->
+                    <button type="submit" class="login-btn" id="registerButton" name="register">
+                        Register
+                    </button>
+
+                </form>
+
+                <!-- Flip Back to Login Link -->
+                <p class="register-text">
+                    Already have an account?
+                    <a href="#" id="showLogin">Back to Login</a>
+                </p>
+
+            </div>
 
         </div>
 
     </div>
-
 
     <!-- JavaScript -->
     <script src="script.js"></script>

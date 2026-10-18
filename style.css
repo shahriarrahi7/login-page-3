@@ -8,362 +8,471 @@
 /* =BODY= */
 
 body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     padding: 20px;
-    background: url(https://plus.unsplash.com/premium_photo-1700502264441-cf38978031fa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) no-repeat ;
+    background: url(https://plus.unsplash.com/premium_photo-1700502264441-cf38978031fa?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) no-repeat;
     background-size: cover;
     background-position: center;
     position: relative;
+    overflow-x: hidden;
 }
 
 
-/* =LOGIN CONTAINER= */
+/* =APP BRANDING: HELLO BUDDY= */
+
+.app-branding {
+    text-align: center;
+    margin-bottom: 22px;
+}
+
+.brand-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #ffd700;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.project-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.project-title i {
+    color: #ffd700;
+    font-size: 28px;
+}
+
+.project-tagline {
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 4px;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+
+/* =LOGIN CONTAINER (3D PERSPECTIVE WRAPPER)= */
 
 .login-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 440px;
+    perspective: 1200px; /* 3D perspective depth */
+    position: relative;
+    z-index: 1;
 }
 
 
-/* LOGIN BOX */
+/* =FLIP CARD INNER (3D ROTATING ELEMENT)= */
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    transform-style: preserve-3d; /* Required for 3D flip */
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1); /* Realistic, smooth flip easing */
+    will-change: transform;
+}
+
+/* Flipped State */
+.flip-card-inner.is-flipped {
+    transform: rotateY(180deg);
+}
+
+
+/* =CARD FACES (FRONT & BACK)= */
+
+.card-face {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    width: 100%;
+    backface-visibility: hidden;         /* Hides reverse side when flipped */
+    -webkit-backface-visibility: hidden; /* Safari & WebKit support */
+    transform-style: preserve-3d;
+}
+
+/* Front Face: Login */
+.card-face.card-front {
+    transform: rotateY(0deg);
+    z-index: 2;
+}
+
+/* Back Face: Registration */
+.card-face.card-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+
+/* Manage interaction clicks when flipped */
+.flip-card-inner.is-flipped .card-front {
+    pointer-events: none;
+    z-index: 1;
+}
+
+.flip-card-inner.is-flipped .card-back {
+    pointer-events: auto;
+    z-index: 2;
+}
+
+.flip-card-inner:not(.is-flipped) .card-back {
+    pointer-events: none;
+}
+
+
+/* =LOGIN BOX / GLASSMORPHISM CARD STYLING= */
 
 .login-box {
-
     background: rgba(255, 255, 255, 0.15);
-
     backdrop-filter: blur(15px);
-
     -webkit-backdrop-filter: blur(15px);
-
     border: 1px solid rgba(255, 255, 255, 0.25);
-
     border-radius: 20px;
-
-    padding: 40px;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.25);
-
+    padding: 38px 36px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
     color: white;
 }
 
 
-/* =HEADING=*/
+/* =HEADING & SUBTITLE= */
 
 .login-box h1 {
     text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
 
-    font-size: 30px;
-
-    margin-bottom: 10px;
+.subtitle {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 24px;
+    font-size: 14px;
+    font-weight: 400;
 }
 
 
-.subtitle {
+/* =MESSAGE / ALERT BANNER= */
 
+.message-banner {
+    display: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-bottom: 18px;
     text-align: center;
+    line-height: 1.4;
+    transition: all 0.3s ease;
+}
 
-    color: rgba(255, 255, 255, 0.8);
+.message-banner.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.35);
+    border: 1px solid rgba(239, 68, 68, 0.65);
+    color: #fff;
+    backdrop-filter: blur(8px);
+}
 
-    margin-bottom: 30px;
+.message-banner.success {
+    display: block;
+    background: rgba(34, 197, 94, 0.35);
+    border: 1px solid rgba(34, 197, 94, 0.65);
+    color: #fff;
+    backdrop-filter: blur(8px);
+}
 
+
+/* =INPUT GROUP= */
+
+.input-group {
+    position: relative;
+    margin-bottom: 16px;
+}
+
+/* Left Icon */
+.input-group > i:first-child {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 15px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Inputs & Select */
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 13px 45px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.95);
+    color: #222;
+    transition: 0.3s ease;
+}
+
+.input-group input::placeholder {
+    color: #777;
     font-size: 14px;
 }
 
-
-/* =INPUT GROUP=*/
-
-.input-group {
-
-    position: relative;
-
-    margin-bottom: 20px;
+/* Select specific styling */
+.input-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    color: #444;
 }
 
-
-/* Left icon */
-
-.input-group > i:first-child {
-
+.select-group::after {
+    content: "\f078";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
     position: absolute;
-
-    left: 15px;
-
+    right: 16px;
     top: 50%;
-
     transform: translateY(-50%);
-
-    color: #777;
-
+    color: #666;
+    font-size: 12px;
+    pointer-events: none;
 }
 
-
-/* Input */
-
-.input-group input {
-
-    width: 100%;
-
-    padding: 15px 45px;
-
-    border: none;
-
-    outline: none;
-
-    border-radius: 10px;
-
-    font-size: 15px;
-
-    background: rgba(255, 255, 255, 0.95);
-
-    transition: 0.3s;
-}
-
-
-/* Input focus */
-
-.input-group input:focus {
-
-    box-shadow:
-        0 0 0 3px rgba(255, 255, 255, 0.3);
-
+/* Input Focus */
+.input-group input:focus,
+.input-group select:focus {
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4);
     transform: translateY(-1px);
 }
 
 
-/* =PASSWORD TOGGLE=*/
+/* =PASSWORD TOGGLE ICON= */
 
 .password-toggle {
-
     position: absolute;
-
     right: 15px;
-
     top: 50%;
-
     transform: translateY(-50%);
-
     color: #777;
-
     cursor: pointer;
-
-    transition: 0.3s;
+    font-size: 15px;
+    padding: 5px;
+    z-index: 2;
+    transition: 0.25s ease;
 }
-
 
 .password-toggle:hover {
-
-    color: #333;
-
+    color: #222;
+    transform: translateY(-50%) scale(1.1);
 }
 
 
-/* =OPTIONS=*/
+/* =REMEMBER ME & FORGOT PASSWORD= */
 
 .options {
-
     display: flex;
-
     justify-content: space-between;
-
     align-items: center;
-
     font-size: 13px;
-
-    margin-bottom: 25px;
+    margin-bottom: 22px;
 }
-
 
 .options label {
-
     display: flex;
-
     align-items: center;
-
-    gap: 5px;
-
+    gap: 7px;
     cursor: pointer;
+    user-select: none;
 }
 
+.options label input[type="checkbox"] {
+    accent-color: #667eea;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
 
 .options a {
-
     color: white;
-
     text-decoration: none;
-
     transition: 0.3s;
 }
-
 
 .options a:hover {
-
     text-decoration: underline;
-
 }
 
 
-/* =LOGIN BUTTON= */
+/* =SUBMIT BUTTONS= */
 
 .login-btn {
-
     width: 100%;
-
-    padding: 14px;
-
+    padding: 13px;
     border: none;
-
     border-radius: 10px;
-
-    background: white;
-
-    color: #667eea;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
+    background: #ffffff;
+    color: #5563de;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-
-    transition: 0.3s;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
-
 
 .login-btn:hover {
-
     transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+    background: #f8f9ff;
 }
 
-
 .login-btn:active {
-
     transform: scale(0.98);
 }
 
-
-/* =DIVIDER=*/
-
-.divider {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin: 25px 0;
-
-    color: rgba(255, 255, 255, 0.7);
+.login-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 
+/* =DIVIDER= */
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 13px;
+    font-weight: 500;
+}
+
 .divider::before,
 .divider::after {
-
     content: "";
-
     flex: 1;
-
     height: 1px;
-
     background: rgba(255, 255, 255, 0.3);
 }
 
 
-/* =SOCIAL BUTTON=*/
+/* =SOCIAL BUTTON= */
 
 .social-btn {
-
     width: 100%;
-
-    padding: 13px;
-
+    padding: 12px;
     border: 1px solid rgba(255, 255, 255, 0.4);
-
     border-radius: 10px;
-
-    background: rgba(255, 255, 255, 0.1);
-
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(5px);
     color: white;
-
     font-size: 14px;
-
+    font-family: inherit;
     cursor: pointer;
-
-    transition: 0.3s;
+    transition: 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-
 
 .social-btn i {
-
-    margin-right: 8px;
+    margin-right: 10px;
+    font-size: 16px;
 }
-
 
 .social-btn:hover {
-
-    background: rgba(255, 255, 255, 0.2);
-
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
 }
 
 
-/* =REGISTER=*/
+/* =SWITCH CARD / REGISTER TEXT= */
 
 .register-text {
-
     text-align: center;
-
-    margin-top: 25px;
-
-    font-size: 14px;
-
-    color: rgba(255, 255, 255, 0.8);
+    margin-top: 22px;
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.85);
 }
-
 
 .register-text a {
-
-    color: white;
-
-    font-weight: bold;
-
-    text-decoration: none;
+    color: #ffffff;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    margin-left: 4px;
+    transition: 0.2s;
 }
-
 
 .register-text a:hover {
-
-    text-decoration: underline;
-
+    color: #e0e7ff;
 }
 
 
-/* =MOBILE RESPONSIVE=*/
+/* =MOBILE RESPONSIVE= */
 
 @media (max-width: 480px) {
+    .login-container {
+        max-width: 100%;
+    }
 
     .login-box {
-
-        padding: 30px 20px;
-
+        padding: 30px 22px;
+        border-radius: 16px;
     }
 
     .login-box h1 {
+        font-size: 24px;
+    }
 
-        font-size: 25px;
+    .subtitle {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
 
+    .input-group input,
+    .input-group select {
+        padding: 12px 40px;
+        font-size: 14px;
+    }
+
+    .login-btn {
+        padding: 12px;
+        font-size: 14.5px;
     }
 
     .options {
-
         font-size: 12px;
-
     }
-
 }
